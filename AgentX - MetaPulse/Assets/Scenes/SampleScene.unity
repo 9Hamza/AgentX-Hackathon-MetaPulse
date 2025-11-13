@@ -819,7 +819,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 835259539}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1789519436}
+        m_TargetAssemblyTypeName: UnityAndGeminiV3, Assembly-CSharp
+        m_MethodName: SendEmotionRequest
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &835259539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -941,7 +953,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1060167267}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1404252039}
+        m_TargetAssemblyTypeName: MicCaptureToNeMo, Assembly-CSharp
+        m_MethodName: TryStartRecording
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1060167267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1282,7 +1306,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1404252039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1346,6 +1370,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78417bd5ae2625248a4a516c72971fa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnityAndGeminiV3
+  emotionStatusTest: {fileID: 1260716332}
   jsonApi: {fileID: 4900000, guid: 08b9385b8ee3437c82caedd290e80b20, type: 3}
   inputField: {fileID: 0}
   uiText: {fileID: 0}

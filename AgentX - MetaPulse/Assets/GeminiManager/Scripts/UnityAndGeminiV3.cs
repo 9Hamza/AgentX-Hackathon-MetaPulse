@@ -86,6 +86,9 @@ public class ChatRequest
 
 public class UnityAndGeminiV3: MonoBehaviour
 {
+
+    [SerializeField] private TMP_Text emotionStatusTest;
+    
     [Header("JSON API Configuration")]
     public TextAsset jsonApi;
 
@@ -146,6 +149,7 @@ public class UnityAndGeminiV3: MonoBehaviour
 
     void Start()
     {
+        
         mediaFilePath = Application.persistentDataPath + "/audio-gemini-test.wav";
         mediaPrompt =
             "Analyze the emotion of this audio file. In the response, only one of these values: 'Happy', 'Sad', or 'Angry'. Even if the audio is neutral, return the closest emotion to these three options.";
@@ -153,11 +157,20 @@ public class UnityAndGeminiV3: MonoBehaviour
         UnityAndGeminiKey jsonApiKey = JsonUtility.FromJson<UnityAndGeminiKey>(jsonApi.text);
         apiKey = jsonApiKey.key;   
         chatHistory = new TextContent[] { };
-        if (prompt != ""){StartCoroutine( SendPromptRequestToGemini(prompt));};
-
+        // if (prompt != ""){StartCoroutine( SendPromptRequestToGemini(prompt));}
+    
         // Image Generation is now a paid feature. The generation of images can produce charges at your credit card.
         // if (imagePrompt != ""){StartCoroutine( SendPromptRequestToGeminiImageGenerator(imagePrompt));};
+    
+        // if (mediaPrompt != "" && mediaFilePath != ""){StartCoroutine(SendPromptMediaRequestToGemini(mediaPrompt, mediaFilePath));};
+    }
 
+    public void SendEmotionRequest()
+    {
+        mediaFilePath = Application.persistentDataPath + "/audio-gemini-test.wav";
+        mediaPrompt =
+            "Analyze the emotion of this audio file. In the response, only one of these values: 'Happy', 'Sad', or 'Angry'. Even if the audio is neutral, return the closest emotion to these three options.";
+        
         if (mediaPrompt != "" && mediaFilePath != ""){StartCoroutine(SendPromptMediaRequestToGemini(mediaPrompt, mediaFilePath));};
     }
 
@@ -483,6 +496,7 @@ public class UnityAndGeminiV3: MonoBehaviour
                 if (response.candidates.Length > 0 && response.candidates[0].content.parts.Length > 0)
                 {
                     string text = response.candidates[0].content.parts[0].text;
+                    emotionStatusTest.text = "Emotion Status: " + text;
                     Debug.Log(text);
                 }
                 else
