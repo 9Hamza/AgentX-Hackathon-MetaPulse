@@ -86,9 +86,6 @@ public class ChatRequest
 
 public class UnityAndGeminiV3: MonoBehaviour
 {
-
-    [SerializeField] private TMP_Text emotionStatusTest;
-    
     [Header("JSON API Configuration")]
     public TextAsset jsonApi;
 
@@ -172,14 +169,6 @@ public class UnityAndGeminiV3: MonoBehaviour
             "Analyze the emotion of this audio file. In the response, only one of these values: 'Happy', 'Sad', or 'Angry'. Even if the audio is neutral, return the closest emotion to these three options.";
         
         if (mediaPrompt != "" && mediaFilePath != ""){StartCoroutine(SendPromptMediaRequestToGemini(mediaPrompt, mediaFilePath));};
-    }
-
-    public enum EmotionState
-    {
-        None,
-        Happy,
-        Sad,
-        Angry
     }
 
     public class EmotionResponse
@@ -442,6 +431,9 @@ public class UnityAndGeminiV3: MonoBehaviour
 
     private IEnumerator SendPromptMediaRequestToGemini(string promptText, string mediaPath)
     {
+        Debug.Log("Sending Prompt Media Request to Gemini...");
+        HelperFunctions.LogFeedbackText("Analyzing emotion...");
+        
         // Read video file and convert to base64
         byte[] mediaBytes = File.ReadAllBytes(mediaPath);
         string base64Media = System.Convert.ToBase64String(mediaBytes);
@@ -496,8 +488,14 @@ public class UnityAndGeminiV3: MonoBehaviour
                 if (response.candidates.Length > 0 && response.candidates[0].content.parts.Length > 0)
                 {
                     string text = response.candidates[0].content.parts[0].text;
-                    emotionStatusTest.text = "Emotion Status: " + text;
                     Debug.Log(text);
+
+                    var emotion = ParseEmotion(text);
+                    EventBus.Publish(new EmotionStateChangedEvent()
+                    {
+                        NewEmotionState =  emotion,
+                    });
+                    HelperFunctions.LogFeedbackText("Emotion State Changed. Press 'Space' to record another emotion.");
                 }
                 else
                 {
@@ -506,7 +504,35 @@ public class UnityAndGeminiV3: MonoBehaviour
             }
         }
     }
+    
+    public EmotionState ParseEmotion(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+            return EmotionState.None;
 
+        text = text.Trim().ToLower();
+
+        if (text.Contains("happy"))
+            return EmotionState.Happy;
+
+        if (text.Contains("sad"))
+            return EmotionState.Sad;
+
+        if (text.Contains("angry"))
+            return EmotionState.Angry;
+
+        return EmotionState.None;
+    }
+}
+
+
+[System.Serializable]
+public enum EmotionState
+{
+    None,
+    Happy,
+    Sad,
+    Angry
 }
 
 

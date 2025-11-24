@@ -1,6 +1,8 @@
 // MicCaptureToNeMo.cs
 using System.Collections;
+using Scripts.EventBus.Events;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.Networking;
 
@@ -12,6 +14,9 @@ public class MicCaptureToNeMo : MonoBehaviour
     public int clipLengthSeconds = 10;        // ring buffer length
     public bool forceMono = true;
     [SerializeField] private float recordingDurationSeconds = 3f;
+    
+    public UnityEvent OnMicRecordingStarted = new UnityEvent();
+    public UnityEvent OnMicRecordingFinishedAndSaved = new UnityEvent();
 
     [Header("API")]
     public string nemoEndpoint = "https://your-host/analyze"; // replace
@@ -37,13 +42,14 @@ public class MicCaptureToNeMo : MonoBehaviour
         }
         else
         {
-            Debug.Log("Currently recording... Can't start new recording session.");
+            HelperFunctions.LogFeedbackText("Currently recording... Can't start new recording session.");
         }
     }
 
     IEnumerator CaptureAndSendOnce(float seconds)
     {
-        Debug.Log("Started recording...");
+        OnMicRecordingStarted?.Invoke();
+        HelperFunctions.LogFeedbackText("Started recording...");
         isRecording = true;
 
         // Start mic (looping ring buffer)
@@ -55,7 +61,7 @@ public class MicCaptureToNeMo : MonoBehaviour
 
         // Stop mic and freeze samples in the clip
         Microphone.End(deviceName);
-        Debug.Log("Stopped recording...");
+        HelperFunctions.LogFeedbackText("Stopped recording...");
 
         // Turn clip into WAV bytes (PCM16 LE)
         byte[] wav = WavWriter.FromAudioClip(micClip, forceMono);
@@ -67,6 +73,8 @@ public class MicCaptureToNeMo : MonoBehaviour
 
         System.IO.File.WriteAllBytes(path, wav); // creates/overwrites the file
         Debug.Log("Saved WAV to: " + path);
+        
+        OnMicRecordingFinishedAndSaved.Invoke();
         
         // POST to NeMo
         using var req = new UnityWebRequest(nemoEndpoint, UnityWebRequest.kHttpVerbPOST);
@@ -90,5 +98,17 @@ public class MicCaptureToNeMo : MonoBehaviour
         // }
 
         isRecording = false;
+    }
+}
+
+public static class HelperFunctions
+{
+    public static void LogFeedbackText(string feedbackText)
+    {
+        Debug.Log(feedbackText);
+        EventBus.Publish(new FeedbackTextChangedEvent()
+        {
+            NewFeedbackText = feedbackText,
+        });
     }
 }
