@@ -1499,8 +1499,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  nemoEndpoint: https://your-host/analyze
+  nemoEndpoint: http://127.0.0.1:8000/predict_emotion
   authBearer: 
+  OnEmotionPredicted:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &800086862
 Transform:
   m_ObjectHideFlags: 0
