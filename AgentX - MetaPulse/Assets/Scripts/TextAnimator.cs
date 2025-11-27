@@ -12,7 +12,7 @@ public class TextAnimator : MonoBehaviour
     public void AnimateTextUpdate(string newText)
     {
         // Kill any existing tweens on this text to prevent overlap
-        textField.transform.DOKill();
+        textField.transform.DOKill(true);
         
         // Update the text
         textField.text = newText;

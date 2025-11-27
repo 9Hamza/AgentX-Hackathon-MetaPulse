@@ -3256,7 +3256,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Current Emotion State: None'
+  m_text: 'Last Emotion State: None'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 324e9fa234e974eb5808e699e48e86b2, type: 2}
   m_sharedMaterial: {fileID: -1086088530882069983, guid: 324e9fa234e974eb5808e699e48e86b2, type: 2}

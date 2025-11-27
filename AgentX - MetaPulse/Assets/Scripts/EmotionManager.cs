@@ -40,7 +40,7 @@ public class EmotionManager : MonoBehaviour
     {
         DisableAllEmotionAreas();
         EnableEmotionArea(e.NewEmotionState, true);
-        emotionStatusText.AnimateTextUpdate($"Current Emotion State: {e.NewEmotionState}");
+        emotionStatusText.AnimateTextUpdate($"Last Emotion State: {e.NewEmotionState}");
     }
 
     private void OnFeedbackTextChanged(FeedbackTextChangedEvent e)
